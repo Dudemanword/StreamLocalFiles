@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using System.Web;
 namespace StreamLocalFiles.Controllers
-{
+{   
     public class FilesController : ApiController
     {
         [Route("files")]
@@ -15,7 +15,7 @@ namespace StreamLocalFiles.Controllers
         public IHttpActionResult Get()
         {   
             IFileOperations fileRetriever = new FileOperations();
-            var directoryInfo = new DirectoryInfo(@"Music\");
+            var directoryInfo = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/Music/"));
             var filesAndFolders = fileRetriever.GetFileAndFolderList(directoryInfo);
             return Json(filesAndFolders);
         }

@@ -8,7 +8,6 @@ namespace StreamLocalFiles.Controllers
 {
     public class FileOperations : IFileOperations
     {
-        //private const string pathToMusicDirectory = @"\\localhost\Users\Shaun\Music\";
         public List<FileInformation> GetFileAndFolderList(DirectoryInfo directoryInfo)
         {
             var directories = GetDirectories(directoryInfo);
