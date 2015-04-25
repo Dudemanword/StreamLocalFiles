@@ -1,4 +1,5 @@
-﻿var app = angular.module("streamLocalFiles", ['ngSanitize']);
+﻿var mediaFiles;
+var app = angular.module("streamLocalFiles", ['ngSanitize']);
 app.controller("FileController", function ($scope, $http, $fileService) {
     var data;
     $scope.getFiles = function () {
@@ -7,6 +8,19 @@ app.controller("FileController", function ($scope, $http, $fileService) {
             $scope.files = blah;
         });
     };
+
+    $scope.init = function () {
+        if (mediaFiles === null || mediaFiles === undefined) {
+            mediaFiles = $scope.getFiles();
+        }
+        else {
+            $scope = mediaFiles;
+        }
+    }
+    //$scope.addFiles = function (files) {
+    //    var whatIsThis = files;
+   // }
+    $scope.init();
 });
 
 app.service('$fileService', function ($http, $q, $sce) {
@@ -32,10 +46,3 @@ app.service('$fileService', function ($http, $q, $sce) {
         return files
     }
 });
-
-app.filter('trusted', function ($sce) {
-    return function (url) {
-        return $sce.trustAsResourceUrl(url);
-    };
-})
-

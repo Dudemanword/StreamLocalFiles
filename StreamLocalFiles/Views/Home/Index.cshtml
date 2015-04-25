@@ -1,15 +1,15 @@
 ﻿<div id="body" ng-app="streamLocalFiles">
     <div ng-controller="FileController">
-        <input type="button" name="fileGetter" value="Get Me Some Files" ng-click="getFiles()" />
         <div id="files">
             <ul>
                 <li ng-repeat="file in files">
-                    <a ng-href="#{{file.Path}}" ng-click="startStreaming(file.Path)">{{file.Name}}</a>
-                    <audio>
-                        <source ng-src="{{file.Path}}" type="audio/mpeg" />
-                    </audio>
+                    <a ng-href="{{file.Path}}">{{file.Name}}</a>
                 </li>
             </ul>
+        </div>
+
+        <div id="addFiles">
+            <input type="file" id="input" multiple onchange="addFiles(this.files)">
         </div>
     </div>
 
