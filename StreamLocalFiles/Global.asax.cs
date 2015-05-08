@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +18,12 @@ namespace StreamLocalFiles
     {
         protected void Application_Start()
         {
+            var formatters = GlobalConfiguration.Configuration.Formatters;
+            var jsonFormatter = formatters.JsonFormatter;
+            var settings = jsonFormatter.SerializerSettings;
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            //json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);

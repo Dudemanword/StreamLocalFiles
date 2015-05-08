@@ -7,13 +7,12 @@
                 </li>
             </ul>
         </div>
-
-        <div id="addFiles">
-            <input type="file" id="input" multiple onchange="addFiles(this.files)">
-        </div>
+        <!--<button type="button" ngf-select ngf-change="addFiles($files)" ngf-multiple="multiple">Select Files to add</button>-->
+        <input type="file" multiple onchange="angular.element(this).scope().addFiles(this.files)"/>
     </div>
 
 </div>
 
 <script src="~/Scripts/angular-sanitize.js"></script>
 <script src="~/Scripts/FileScripts/FileController.js"></script>
+<script src="~/Scripts/angular-route.js"></script>

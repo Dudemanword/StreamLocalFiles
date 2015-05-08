@@ -19,5 +19,20 @@ namespace StreamLocalFiles.Controllers
             var filesAndFolders = fileRetriever.GetFileAndFolderList(directoryInfo);
             return Json(filesAndFolders);
         }
+
+        [Route("addFiles")]
+        [HttpPost]
+        public IHttpActionResult Post()
+        {
+            var httpRequest = HttpContext.Current.Request;
+
+            for (int i = 0; i < httpRequest.Files.Count; i++)
+            {
+                HttpPostedFile file = httpRequest.Files[i];
+                var fileName = System.Web.HttpContext.Current.Server.MapPath("~/Music/" + file.FileName);
+                file.SaveAs(fileName);
+            }
+            return Ok(); 
+        }
     }
 }

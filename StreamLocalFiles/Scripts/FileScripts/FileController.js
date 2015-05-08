@@ -1,11 +1,11 @@
 ﻿var mediaFiles;
-var app = angular.module("streamLocalFiles", ['ngSanitize']);
-app.controller("FileController", function ($scope, $http, $fileService) {
+var app = angular.module("streamLocalFiles", ['ngSanitize','ngRoute']);
+app.controller("FileController", function ($scope, $http, $fileService, $route) {
     var data;
     $scope.getFiles = function () {
         data = $fileService.retrieveDataFromServer().then(function (data) {
-            var blah = $fileService.getOnlyFiles(data);
-            $scope.files = blah;
+            var files = $fileService.getOnlyFiles(data);
+            $scope.files = files;
         });
     };
 
@@ -17,9 +17,18 @@ app.controller("FileController", function ($scope, $http, $fileService) {
             $scope = mediaFiles;
         }
     }
-    //$scope.addFiles = function (files) {
-    //    var whatIsThis = files;
-   // }
+
+    $scope.addFiles = function (files) {
+        var filesToAdd = [];
+
+        for (var i = 0; i < files.length; i++) {
+            filesToAdd.push(files[i].file)
+        }
+
+        $fileService.addFilesToDirectory(files, $route, $scope);
+    }
+
+    //Initialize on Controller load
     $scope.init();
 });
 
@@ -30,7 +39,6 @@ app.service('$fileService', function ($http, $q, $sce) {
                 resolve(data);
             });
         });
-        
     }
 
     this.getOnlyFiles = function (data) {
@@ -44,5 +52,25 @@ app.service('$fileService', function ($http, $q, $sce) {
             }
         });
         return files
+    }
+
+    this.addFilesToDirectory = function (data, $route, $scope) {
+        $http({
+            method: "POST",
+            url: "/api/files/addFiles",
+            headers: { "Content-Type": undefined },
+            transformRequest: function (data) {
+                console.log("data: \n", data);
+                var formData = new FormData();
+                formData.append("model", angular.toJson(data.model));
+                for (var i = 0; i < data.files.length; i++) {
+                    formData.append("file" + i, data.files[i]);
+                }
+                return formData;
+            },
+            data: { model: { name: "", comments: "" }, files: data }
+        }).success(function () {
+            $scope.getFiles();
+        });
     }
 });
